@@ -1,0 +1,11 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /#admin
+
+# Host
+Host: https://purebotanics.vercel.app
+
+# Sitemaps
+Sitemap: https://purebotanics.vercel.app/sitemap.xml

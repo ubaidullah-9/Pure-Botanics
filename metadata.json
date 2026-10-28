@@ -1,0 +1,6 @@
+{
+  "name": "Pure Botanics | Pure Gilgit Shilajit & Herbal Hair Oil",
+  "description": "Pure Botanics - Pakistan's premium D2C herbal brand offering 100% pure Aftabi Gilgit Shilajit and cold-pressed organic hair oil. Cash on Delivery nationwide, PCSIR lab-tested with instant WhatsApp support.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

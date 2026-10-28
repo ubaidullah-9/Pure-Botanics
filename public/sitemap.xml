@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:news="http://www.google.com/schemas/sitemap-news/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+
+  <!-- Pure Botanics Home Page -->
+  <url>
+    <loc>https://purebotanics.vercel.app/</loc>
+    <lastmod>2026-10-28</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- Product: Pure Aftabi Gilgit Shilajit -->
+  <url>
+    <loc>https://purebotanics.vercel.app/products/shilajit</loc>
+    <lastmod>2026-10-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Product: Organic Herbal Hair Oil -->
+  <url>
+    <loc>https://purebotanics.vercel.app/products/hair-oil</loc>
+    <lastmod>2026-10-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Product: The Royal Karakoram Duo Combo -->
+  <url>
+    <loc>https://purebotanics.vercel.app/products/combo</loc>
+    <lastmod>2026-10-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Herbal Hub & Desi Totkay Blog Landing -->
+  <url>
+    <loc>https://purebotanics.vercel.app/blog</loc>
+    <lastmod>2026-10-28</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <!-- Article 1: Asli vs Naqli Shilajit Purity Tests -->
+  <url>
+    <loc>https://purebotanics.vercel.app/blog/asli-vs-naqli-shilajit-pehchan-purity-tests</loc>
+    <lastmod>2026-10-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Article 2: Rosemary, Ratanjot & Amla Hair Fall Totka -->
+  <url>
+    <loc>https://purebotanics.vercel.app/blog/rosemary-amla-ratanjot-hair-fall-desi-totka</loc>
+    <lastmod>2026-10-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Article 3: Shilajit Khane ka Sahi Tariqa & Dosage -->
+  <url>
+    <loc>https://purebotanics.vercel.app/blog/shilajit-khane-ka-sahi-tariqa-dosage-summer-winter</loc>
+    <lastmod>2026-10-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Article 4: Dandruff, Bald Spots aur Kamzor Baalon ka Ilaj -->
+  <url>
+    <loc>https://purebotanics.vercel.app/blog/dandruff-bald-spots-kamzor-baal-complete-hair-routine</loc>
+    <lastmod>2026-10-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+</urlset>
