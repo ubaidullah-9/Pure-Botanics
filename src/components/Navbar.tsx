@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { translations } from '../data/translations';
 import { Language } from '../types';
 import { Shield, ShoppingBag, Globe, UserCheck } from 'lucide-react';
@@ -23,41 +24,41 @@ export const Navbar: React.FC<NavbarProps> = ({
     <header className="sticky top-0 z-40 bg-stone-950/90 backdrop-blur-md border-b border-stone-800">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between gap-8 h-16">
         {/* Zone 1: Single brand wordmark with luxury herbal emblem */}
-        <a
-          href="/"
+        <Link
+          to="/"
           className="shrink-0 flex items-center"
         >
           <HerbalLogo size="md" />
-        </a>
+        </Link>
 
         {/* Zone 2: 4–5 clean single-line text navigation links */}
         <nav className="hidden md:flex items-center gap-6 text-xs sm:text-sm font-medium text-stone-300">
           <a
-            href="#shilajit"
+            href="/#shilajit"
             className="hover:text-amber-300 transition-colors whitespace-nowrap shrink-0"
           >
             {t.nav.shilajit}
           </a>
           <a
-            href="#hair-oil"
+            href="/#hair-oil"
             className="hover:text-emerald-300 transition-colors whitespace-nowrap shrink-0"
           >
             {t.nav.hairOil}
           </a>
           <a
-            href="#purity-tests"
+            href="/#purity-tests"
             className="hover:text-amber-300 transition-colors whitespace-nowrap shrink-0"
           >
             {t.nav.purityTests}
           </a>
-          <a
-            href="#blog-hub"
+          <Link
+            to="/#blog-hub"
             className="hover:text-emerald-300 transition-colors whitespace-nowrap shrink-0 font-semibold text-emerald-400"
           >
             {t.nav.blog}
-          </a>
+          </Link>
           <a
-            href="#reviews"
+            href="/#reviews"
             className="hover:text-amber-300 transition-colors whitespace-nowrap shrink-0"
           >
             {t.nav.reviews}

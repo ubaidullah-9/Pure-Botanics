@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { BlogPost, BlogCategory, Language } from '../types';
 import { Search, BookOpen, Clock, ArrowRight, Sparkles, Shield, Leaf } from 'lucide-react';
 import { ProductVisual } from './ProductVisual';
@@ -98,10 +99,14 @@ export const BlogHub: React.FC<BlogHubProps> = ({ posts, onSelectPost, lang }) =
               const isPurity = post.category === 'Asli vs Naqli (Purity Tests)';
 
               return (
-                <article
+                <Link
                   key={post.id}
-                  onClick={() => onSelectPost(post)}
-                  className="rounded-3xl border border-stone-800 bg-gradient-to-b from-stone-900 to-stone-950 hover:border-amber-500/40 p-5 sm:p-6 flex flex-col justify-between shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer group"
+                  to={`/blog/${post.id}`}
+                  onClick={() => {
+                    onSelectPost?.(post);
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }}
+                  className="rounded-3xl border border-stone-800 bg-gradient-to-b from-stone-900 to-stone-950 hover:border-amber-500/40 p-5 sm:p-6 flex flex-col justify-between shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer group no-underline"
                 >
                   <div>
                     {/* Visual Thumbnail */}
@@ -157,7 +162,7 @@ export const BlogHub: React.FC<BlogHubProps> = ({ posts, onSelectPost, lang }) =
                       <ArrowRight className="w-3.5 h-3.5" />
                     </span>
                   </div>
-                </article>
+                </Link>
               );
             })}
           </div>

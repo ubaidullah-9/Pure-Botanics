@@ -4,6 +4,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
+import { Routes, Route, useNavigate, useLocation, useParams, Navigate } from 'react-router-dom';
 import { Product, BundleOption, Language, BlogPost } from './types';
 import { translations } from './data/translations';
 import { getStoredProducts, getStoredBlogPosts } from './services/storage';
@@ -23,13 +24,193 @@ import { FloatingWhatsApp } from './components/FloatingWhatsApp';
 import { RecentOrderToast } from './components/RecentOrderToast';
 import { Footer } from './components/Footer';
 
+// Standalone Blog Post Route Component with direct URL handling & SEO
+function BlogPostPage({
+  posts,
+  products,
+  onOpenCheckout,
+  lang,
+}: {
+  posts: BlogPost[];
+  products: Product[];
+  onOpenCheckout: (product: Product, bundle: BundleOption) => void;
+  lang: Language;
+}) {
+  const { slug } = useParams<{ slug: string }>();
+  const navigate = useNavigate();
+
+  const post = posts.find((p) => p.id === slug);
+
+  if (!post) {
+    return (
+      <div className="min-h-[60vh] flex flex-col items-center justify-center px-4 py-20 text-center">
+        <h2 className="text-2xl font-serif-luxury font-bold text-amber-300 mb-3">
+          {lang === 'ur' ? 'مضمون نہیں مل سکا' : 'Article Not Found'}
+        </h2>
+        <p className="text-stone-400 text-sm mb-6 max-w-md">
+          {lang === 'ur'
+            ? 'معذرت، مطلوبہ ہربل گائیڈ دستیاب نہیں ہے۔ براہ کرم بلاگ لسٹ میں سے دیگر ٹوٹکے ملاحظہ فرمائیں۔'
+            : 'The requested herbal guide could not be found. Please browse our other authentic Pakistani health guides.'}
+        </p>
+        <button
+          onClick={() => {
+            navigate('/#blog-hub');
+            setTimeout(() => {
+              const el = document.getElementById('blog-hub');
+              if (el) el.scrollIntoView({ behavior: 'smooth' });
+            }, 100);
+          }}
+          className="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold text-sm transition-all cursor-pointer"
+        >
+          {lang === 'ur' ? 'تمام بلاگز دیکھیں' : 'Browse All Guides'}
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <BlogPostReader
+      post={post}
+      onBack={() => {
+        navigate('/#blog-hub');
+        setTimeout(() => {
+          const el = document.getElementById('blog-hub');
+          if (el) el.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+      }}
+      products={products}
+      onOpenCheckout={onOpenCheckout}
+      lang={lang}
+    />
+  );
+}
+
+// Storefront Route Component (Home & /blog anchor scroll)
+function StorefrontPage({
+  products,
+  blogPosts,
+  lang,
+  onOpenCheckout,
+  onOpenLabReport,
+}: {
+  products: Product[];
+  blogPosts: BlogPost[];
+  lang: Language;
+  onOpenCheckout: (product: Product, bundle: BundleOption) => void;
+  onOpenLabReport: () => void;
+}) {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const shilajitProduct = products.find((p) => p.id === 'shilajit') || products[0];
+  const comboBundle =
+    shilajitProduct?.bundles.find((b) => b.id === 'combo') ||
+    shilajitProduct?.bundles[2] ||
+    shilajitProduct?.bundles[0];
+
+  const t = translations[lang];
+
+  useEffect(() => {
+    document.title = 'Pure Botanics | Pure Gilgit Shilajit & Herbal Hair Oil';
+    let canonical = document.querySelector('link[rel="canonical"]');
+    if (canonical) {
+      canonical.setAttribute('href', 'https://purebotanics.vercel.app/');
+    }
+
+    // Smooth scroll for hash or /blog path
+    if (location.pathname === '/blog' || location.hash === '#blog-hub' || location.hash === '#blog') {
+      setTimeout(() => {
+        const el = document.getElementById('blog-hub');
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+    } else if (location.hash) {
+      const id = location.hash.replace('#', '');
+      const el = document.getElementById(id);
+      if (el) {
+        setTimeout(() => el.scrollIntoView({ behavior: 'smooth' }), 100);
+      }
+    }
+  }, [location.pathname, location.hash]);
+
+  return (
+    <>
+      {/* Hero Section */}
+      <Hero
+        lang={lang}
+        onOpenCheckout={onOpenCheckout}
+        featuredProduct={shilajitProduct}
+      />
+
+      <main className="space-y-16 sm:space-y-24 py-12 sm:py-16">
+        {/* Products Showcase Section */}
+        <section id="products" className="max-w-6xl mx-auto px-4 sm:px-6">
+          <div className="text-center max-w-2xl mx-auto mb-12 sm:mb-16">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-serif-luxury font-bold text-stone-100">
+              {t.products.heading}
+            </h2>
+            <p className="mt-3 text-xs sm:text-sm text-stone-400">
+              {t.products.subheading}
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10">
+            {products.map((prod) => (
+              <ProductCard
+                key={prod.id}
+                product={prod}
+                lang={lang}
+                onOpenCheckout={onOpenCheckout}
+              />
+            ))}
+          </div>
+        </section>
+
+        {/* The Royal Karakoram Duo (Ultimate Combo Banner) */}
+        {shilajitProduct && comboBundle && (
+          <section className="max-w-6xl mx-auto px-4 sm:px-6">
+            <UltimateComboBanner
+              shilajitProduct={shilajitProduct}
+              comboBundle={comboBundle}
+              lang={lang}
+              onOpenCheckout={onOpenCheckout}
+            />
+          </section>
+        )}
+
+        {/* Interactive Purity Test & Lab Verification */}
+        <PurityTests
+          lang={lang}
+          onOpenLabReport={onOpenLabReport}
+        />
+
+        {/* Herbal Ingredients Breakdown Grid */}
+        <IngredientsBreakdown lang={lang} />
+
+        {/* Herbal Hub & Desi Totkay Blog Section */}
+        <BlogHub
+          posts={blogPosts}
+          onSelectPost={(post) => {
+            navigate(`/blog/${post.id}`);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
+          lang={lang}
+        />
+
+        {/* Verified Pakistani Reviews (WhatsApp Style Cards) */}
+        <ReviewsSection lang={lang} />
+      </main>
+    </>
+  );
+}
+
 export default function App() {
   const [lang, setLang] = useState<Language>('en');
+  const navigate = useNavigate();
+  const location = useLocation();
 
   // Products and Blog state from storage
   const [products, setProducts] = useState<Product[]>([]);
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
-  const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
 
   // Checkout Drawer State
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
@@ -39,6 +220,13 @@ export default function App() {
   // Modals
   const [isLabReportOpen, setIsLabReportOpen] = useState(false);
   const [isAdminOpen, setIsAdminOpen] = useState(false);
+
+  // Auto-open admin when route is /admin
+  useEffect(() => {
+    if (location.pathname === '/admin') {
+      setIsAdminOpen(true);
+    }
+  }, [location.pathname]);
 
   // Initialize data from persistent storage
   useEffect(() => {
@@ -53,43 +241,6 @@ export default function App() {
         loadedProducts[0].bundles.find((b) => b.isPopular) || loadedProducts[0].bundles[0]
       );
     }
-
-    // Check clean URL path and hash for direct /blog/:slug, /admin, or /blog navigation
-    const checkRoute = () => {
-      const pathname = window.location.pathname;
-      const hash = window.location.hash;
-
-      if (pathname === '/admin' || hash === '#admin') {
-        setIsAdminOpen(true);
-      } else if (pathname.startsWith('/blog/')) {
-        const slug = pathname.replace('/blog/', '').replace(/\/$/, '');
-        const found = loadedPosts.find((p) => p.id === slug);
-        if (found) {
-          setSelectedPost(found);
-        }
-      } else if (hash.startsWith('#blog/')) {
-        const slug = hash.replace('#blog/', '');
-        const found = loadedPosts.find((p) => p.id === slug);
-        if (found) {
-          setSelectedPost(found);
-        }
-      } else if (pathname === '/blog' || hash === '#blog' || hash === '#blog-hub') {
-        setSelectedPost(null);
-        const el = document.getElementById('blog-hub');
-        if (el) el.scrollIntoView({ behavior: 'smooth' });
-      } else if (pathname === '/' || !hash) {
-        setSelectedPost(null);
-        document.title = 'Pure Botanics | Pure Gilgit Shilajit & Herbal Hair Oil';
-      }
-    };
-
-    checkRoute();
-    window.addEventListener('hashchange', checkRoute);
-    window.addEventListener('popstate', checkRoute);
-    return () => {
-      window.removeEventListener('hashchange', checkRoute);
-      window.removeEventListener('popstate', checkRoute);
-    };
   }, []);
 
   const toggleLanguage = () => {
@@ -112,45 +263,6 @@ export default function App() {
     }
   };
 
-  const handleSelectPost = (post: BlogPost) => {
-    setSelectedPost(post);
-    try {
-      window.history.pushState(null, '', `/blog/${post.id}`);
-    } catch {
-      window.location.hash = `blog/${post.id}`;
-    }
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const handleBackToBlogHub = () => {
-    setSelectedPost(null);
-    document.title = 'Pure Botanics | Pure Gilgit Shilajit & Herbal Hair Oil';
-    let canonical = document.querySelector('link[rel="canonical"]');
-    if (canonical) {
-      canonical.setAttribute('href', 'https://purebotanics.vercel.app/');
-    }
-
-    try {
-      window.history.pushState(null, '', '/blog');
-    } catch {
-      window.location.hash = 'blog-hub';
-    }
-
-    setTimeout(() => {
-      const el = document.getElementById('blog-hub');
-      if (el) el.scrollIntoView({ behavior: 'smooth' });
-    }, 100);
-  };
-
-  const shilajitProduct = products.find((p) => p.id === 'shilajit') || products[0];
-  const hairOilProduct = products.find((p) => p.id === 'hair-oil') || products[1] || products[0];
-  const comboBundle =
-    shilajitProduct?.bundles.find((b) => b.id === 'combo') ||
-    shilajitProduct?.bundles[2] ||
-    shilajitProduct?.bundles[0];
-
-  const t = translations[lang];
-
   if (!products || products.length === 0) {
     return null;
   }
@@ -170,81 +282,58 @@ export default function App() {
         onOpenAdmin={() => setIsAdminOpen(true)}
       />
 
-      {/* Reader View or Main Storefront */}
-      {selectedPost ? (
-        <BlogPostReader
-          post={selectedPost}
-          onBack={handleBackToBlogHub}
-          products={products}
-          onOpenCheckout={handleOpenCheckout}
-          lang={lang}
-        />
-      ) : (
-        <>
-          {/* Hero Section */}
-          <Hero
-            lang={lang}
-            onOpenCheckout={handleOpenCheckout}
-            featuredProduct={shilajitProduct}
-          />
-
-          <main className="space-y-16 sm:space-y-24 py-12 sm:py-16">
-            {/* Products Showcase Section */}
-            <section id="products" className="max-w-6xl mx-auto px-4 sm:px-6">
-              <div className="text-center max-w-2xl mx-auto mb-12 sm:mb-16">
-                <h2 className="text-2xl sm:text-3xl md:text-4xl font-serif-luxury font-bold text-stone-100">
-                  {t.products.heading}
-                </h2>
-                <p className="mt-3 text-xs sm:text-sm text-stone-400">
-                  {t.products.subheading}
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10">
-                {products.map((prod) => (
-                  <ProductCard
-                    key={prod.id}
-                    product={prod}
-                    lang={lang}
-                    onOpenCheckout={handleOpenCheckout}
-                  />
-                ))}
-              </div>
-            </section>
-
-            {/* The Royal Karakoram Duo (Ultimate Combo Banner) */}
-            {shilajitProduct && comboBundle && (
-              <section className="max-w-6xl mx-auto px-4 sm:px-6">
-                <UltimateComboBanner
-                  shilajitProduct={shilajitProduct}
-                  comboBundle={comboBundle}
-                  lang={lang}
-                  onOpenCheckout={handleOpenCheckout}
-                />
-              </section>
-            )}
-
-            {/* Interactive Purity Test & Lab Verification */}
-            <PurityTests
+      {/* Routes View: Standard BrowserRouter Routing */}
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <StorefrontPage
+              products={products}
+              blogPosts={blogPosts}
               lang={lang}
+              onOpenCheckout={handleOpenCheckout}
               onOpenLabReport={() => setIsLabReportOpen(true)}
             />
-
-            {/* Herbal Ingredients Breakdown Grid */}
-            <IngredientsBreakdown lang={lang} />
-
-            {/* Herbal Hub & Desi Totkay Blog Section */}
-            <BlogHub
+          }
+        />
+        <Route
+          path="/blog"
+          element={
+            <StorefrontPage
+              products={products}
+              blogPosts={blogPosts}
+              lang={lang}
+              onOpenCheckout={handleOpenCheckout}
+              onOpenLabReport={() => setIsLabReportOpen(true)}
+            />
+          }
+        />
+        <Route
+          path="/blog/:slug"
+          element={
+            <BlogPostPage
               posts={blogPosts}
-              onSelectPost={handleSelectPost}
+              products={products}
+              onOpenCheckout={handleOpenCheckout}
               lang={lang}
             />
-
-            {/* Verified Pakistani Reviews (WhatsApp Style Cards) */}
-            <ReviewsSection lang={lang} />
-          </main>
-        </>
-      )}
+          }
+        />
+        <Route
+          path="/admin"
+          element={
+            <div className="py-20 text-center">
+              <button
+                onClick={() => setIsAdminOpen(true)}
+                className="px-6 py-3 bg-amber-500 text-stone-950 font-bold rounded-xl"
+              >
+                Open Admin Portal
+              </button>
+            </div>
+          }
+        />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
 
       {/* Footer */}
       <Footer lang={lang} />
@@ -276,7 +365,12 @@ export default function App() {
       {/* Protected Operations Admin Dashboard */}
       <AdminDashboard
         isOpen={isAdminOpen}
-        onClose={() => setIsAdminOpen(false)}
+        onClose={() => {
+          setIsAdminOpen(false);
+          if (window.location.pathname === '/admin') {
+            navigate('/');
+          }
+        }}
         lang={lang}
         onProductsUpdated={(updated) => setProducts(updated)}
         onBlogPostsUpdated={(updated) => setBlogPosts(updated)}
