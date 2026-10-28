@@ -50,6 +50,7 @@ import {
   Sparkles,
   ShoppingBag,
 } from 'lucide-react';
+import { HerbalLogo } from './HerbalLogo';
 
 interface AdminDashboardProps {
   isOpen: boolean;
@@ -442,9 +443,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
         {/* Top Header */}
         <div className="p-4 sm:p-6 border-b border-stone-800 flex items-center justify-between bg-stone-950/80 sticky top-0 z-10">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center">
-              <Package className="w-5 h-5 text-amber-400" />
-            </div>
+            <HerbalLogo size="sm" showText={false} />
             <div>
               <h2 className="text-lg sm:text-xl font-serif-luxury font-bold text-amber-200">
                 {t.admin.title}
@@ -477,8 +476,11 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
         {/* PIN Authentication Screen (Zero Hints, PIN: 6598) */}
         {!isAuthenticated ? (
           <div className="p-8 sm:p-12 max-w-md mx-auto text-center my-auto">
-            <div className="w-16 h-16 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center mx-auto mb-4 text-amber-400">
-              <Lock className="w-8 h-8" />
+            <div className="flex justify-center mb-5">
+              <HerbalLogo size="md" />
+            </div>
+            <div className="w-14 h-14 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center mx-auto mb-3 text-amber-400">
+              <Lock className="w-6 h-6" />
             </div>
             <h3 className="text-xl font-serif-luxury font-bold text-stone-100 mb-1">
               Admin Access Verification

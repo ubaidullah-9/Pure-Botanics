@@ -2,6 +2,7 @@ import React from 'react';
 import { translations } from '../data/translations';
 import { Language } from '../types';
 import { Shield, ShoppingBag, Globe, UserCheck } from 'lucide-react';
+import { HerbalLogo } from './HerbalLogo';
 
 interface NavbarProps {
   lang: Language;
@@ -21,12 +22,12 @@ export const Navbar: React.FC<NavbarProps> = ({
   return (
     <header className="sticky top-0 z-40 bg-stone-950/90 backdrop-blur-md border-b border-stone-800">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between gap-8 h-16">
-        {/* Zone 1: Single text element brand wordmark */}
+        {/* Zone 1: Single brand wordmark with luxury herbal emblem */}
         <a
           href="/"
-          className="text-lg sm:text-xl font-serif-luxury font-bold tracking-tight text-amber-200 hover:text-amber-100 transition-colors whitespace-nowrap shrink-0"
+          className="shrink-0 flex items-center"
         >
-          {t.brandName}
+          <HerbalLogo size="md" />
         </a>
 
         {/* Zone 2: 4–5 clean single-line text navigation links */}

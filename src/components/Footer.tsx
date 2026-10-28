@@ -2,6 +2,7 @@ import React from 'react';
 import { translations } from '../data/translations';
 import { Language } from '../types';
 import { ShieldCheck, Phone, MapPin, Mail } from 'lucide-react';
+import { HerbalLogo } from './HerbalLogo';
 
 interface FooterProps {
   lang: Language;
@@ -16,9 +17,9 @@ export const Footer: React.FC<FooterProps> = ({ lang }) => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Brand Info */}
           <div className="space-y-3 md:col-span-2">
-            <span className="text-lg font-serif-luxury font-bold text-amber-200 block">
-              {t.brandName}
-            </span>
+            <div className="mb-2">
+              <HerbalLogo size="md" />
+            </div>
             <p className="text-stone-400 max-w-md leading-relaxed">
               {lang === 'ur'
                 ? 'پیور بوٹینکس گلگت بلتستان کے روایتی جڑی بوٹیوں کے علم اور جدید لیب ٹیسٹنگ کا سنگم ہے۔ 100 فیصد قدرتی، غیر ملاوٹ شدہ، اور خالص۔'
